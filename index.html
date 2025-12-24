@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Bomb Game</title>
+
+  <!-- CSS esterno -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="layout">
+    <div class="left-column">
+      <header class="header">
+        <h1>The Bomb Game</h1>
+        <div class="category-buttons">
+          <button class="category-btn active" data-category="syllables">Syllables</button>
+          <button class="category-btn" data-category="letters">Initial Letter</button>
+        </div>
+      </header>
+
+      <main>
+        <div class="game-area">
+          <!-- bomba + challenge -->
+            <div class="bomb-container">
+                        <div class="bomb">
+                            <div class="fuse"></div>
+                            <div class="spark"></div>
+                        </div>
+                <div class="explosion"></div>
+            </div>
+
+      <div class="challenge-display">
+        <div class="challenge-label">Current Challenge:</div>
+        <div class="challenge-text hidden" id="challengeText">Click Start to Begin</div>
+        <button class="next-round-btn" id="nextRoundBtn">Start Round</button>
+      </div>
+        </div>
+      </main>
+    </div>
+
+    <aside class="sidebar">
+      <!-- players -->
+      <h2>Players</h2>
+      <div class="add-player">
+        <input type="text" id="playerNameInput" placeholder="Player name" />
+        <button onclick="addPlayer()">Add</button>
+      </div>
+      <div class="player-list" id="playerList"></div>
+      <div class="controls">
+        <button class="control-btn" onclick="newGame()">New Game</button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="status-message" id="statusMessage">BOOM!</div>
+  <script src="script.js"></script>
+</body>
