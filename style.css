@@ -40,7 +40,7 @@
 
 /* Main solo per padding orizzontale sotto l’header */
 .left-column main {
-    padding: 2rem;
+    padding: 8px;
 }
 
 /* Game area centrata SOLO orizzontalmente */
@@ -97,7 +97,7 @@
         main {
             flex: 1;
             display: flex;
-            padding: 2rem;
+            padding: 8px;
             gap: 2rem;
         }
 
@@ -255,6 +255,15 @@
             cursor: not-allowed;
             transform: none;
         }
+
+        .page-footer {
+        text-align: center;
+        margin: 18px 0 10px;
+        font-size: 0.9rem;
+        color: #6B3793;         /* un viola */
+        font-weight: bold;
+        }
+
 
 /* Sidebar colonna destra */
 .sidebar {
