@@ -74,11 +74,14 @@ const syllables = [
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
         // Initialize game
-        function init() {
+            function init() {
             setupCategoryButtons();
             setupNextRoundButton();
+            setupSkipButton();   
             showIdleState();
-        }
+            setupSidebarToggle();
+            }
+
 
         // Category button handling
         function setupCategoryButtons() {
@@ -128,6 +131,23 @@ const syllables = [
                 }
             });
         }
+function setupSkipButton() {
+  const skipBtn = document.getElementById('skipBtn');
+  if (!skipBtn) return;
+
+  skipBtn.addEventListener('click', () => {
+    if (!isRoundActive) return;  // se non c'è un round in corso, non fa nulla
+
+    // interrompe il timer, ferma il ticchettio, rimuove gli stati della bomba
+    stopRound();
+
+    // torna allo stato “idle” senza esplosione e senza BOOM
+    showIdleState();
+  });
+}
+
+
+
 
         // Start round with random timer
         function startRound() {
@@ -243,14 +263,6 @@ const syllables = [
   });
 }
 
-// dentro init():
-function init() {
-  setupCategoryButtons();
-  setupNextRoundButton();
-  showIdleState();
-  setupSidebarToggle();    // <--- aggiungi questa riga
-}
-
 
         // Reset round (removed - replaced by showIdleState)
 
@@ -270,50 +282,102 @@ function init() {
             }
         }
 
-        function renderPlayers() {
-            const list = document.getElementById('playerList');
-            list.innerHTML = '';
-            
-            players.forEach((player, index) => {
-                const card = document.createElement('div');
-                card.className = 'player-card' + (player.eliminated ? ' eliminated' : '');
-                
-                const nameDiv = document.createElement('div');
-                nameDiv.className = 'player-name';
-                nameDiv.textContent = player.name;
-                
-                const livesDiv = document.createElement('div');
-                livesDiv.className = 'lives';
-                
-                for (let i = 0; i < 5; i++) {
-                    const life = document.createElement('div');
-                    life.className = 'life' + (i >= player.lives ? ' lost' : '');
-                    life.addEventListener('click', () => toggleLife(index, i));
-                    livesDiv.appendChild(life);
-                }
-                
-                card.appendChild(nameDiv);
-                card.appendChild(livesDiv);
-                list.appendChild(card);
+        function addNumberedPlayers(from, to) {
+        players = []; // oppure elimina questa riga se vuoi aggiungerli a quelli esistenti
+        for (let i = from; i <= to; i++) {
+            players.push({
+            name: String(i),    // inizialmente solo il numero
+            lives: 5,
+            eliminated: false
             });
         }
-
-        function toggleLife(playerIndex, lifeIndex) {
-            const player = players[playerIndex];
-            if (!player.eliminated) {
-                if (lifeIndex < player.lives) {
-                    player.lives = lifeIndex;
-                } else if (lifeIndex === player.lives && player.lives < 5) {
-                    player.lives = lifeIndex + 1;
-                }
-                
-                if (player.lives === 0) {
-                    player.eliminated = true;
-                }
-                
-                renderPlayers();
-            }
+        renderPlayers();
         }
+
+        function renderPlayers() {
+  sortPlayers();                          // se l'hai già aggiunto
+
+  const list = document.getElementById('playerList');
+  list.innerHTML = '';
+
+  players.forEach((player, index) => {
+    const card = document.createElement('div');
+    card.className = 'player-card' + (player.eliminated ? ' eliminated' : '');
+
+    // wrapper intestazione: nome + delete
+    const headerRow = document.createElement('div');
+    headerRow.className = 'player-header';
+
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'player-name';
+    nameDiv.textContent = player.name;
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'player-delete';
+    deleteBtn.textContent = '✕';
+    deleteBtn.title = 'Remove player';
+    deleteBtn.addEventListener('click', () => removePlayer(index));
+
+    headerRow.appendChild(nameDiv);
+    headerRow.appendChild(deleteBtn);
+
+    const livesDiv = document.createElement('div');
+    livesDiv.className = 'lives';
+    for (let i = 0; i < 5; i++) {
+      const life = document.createElement('div');
+      life.className = 'life' + (i >= player.lives ? ' lost' : '');
+      life.addEventListener('click', () => toggleLife(index, i));
+      livesDiv.appendChild(life);
+    }
+
+    card.appendChild(headerRow);
+    card.appendChild(livesDiv);
+    list.appendChild(card);
+  });
+}
+
+
+
+function toggleLife(playerIndex, lifeIndex) {
+  const player = players[playerIndex];
+  if (!player.eliminated) {
+    if (lifeIndex < player.lives) {
+      player.lives = lifeIndex;
+    } else if (lifeIndex === player.lives && player.lives < 5) {
+      player.lives = lifeIndex + 1;
+    }
+
+    if (player.lives === 0) {
+      player.eliminated = true;
+    }
+
+    renderPlayers();      // ora ridisegna già ordinato
+  }
+}
+
+        function sortPlayers() {
+  players.sort((a, b) => {
+    const aDead = a.lives === 0;
+    const bDead = b.lives === 0;
+
+    // I morti (0 vite) vanno in fondo
+    if (aDead && !bDead) return 1;   // a dopo b
+    if (!aDead && bDead) return -1;  // a prima di b
+
+    // Tra vivi: meno vite prima
+    if (!aDead && !bDead) {
+      return a.lives - b.lives;
+    }
+
+    // Tra morti: mantieni l'ordine (o ordina per nome se vuoi)
+    return 0;
+  });
+}
+ function removePlayer(index) {
+  players.splice(index, 1);  // toglie il giocatore dall'array
+  renderPlayers();           // ridisegna la lista (già ordinata)
+}
+
 
         function newGame() {
             stopRound();
