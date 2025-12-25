@@ -5,19 +5,25 @@
             box-sizing: border-box;
         }
 
+        html, body {
+        height: 100%;
+        margin: 0;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f3f0 0%, #e8e6e3 100%);
+            background: linear-gradient(135deg, #f5f3f0 0%, #f8f8f8 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             color: #2a2a2a;
         }
+
 /* Contenitore a due colonne */
 .layout {
     display: flex;
     align-items: flex-start;   /* colonne allineate in alto */
-    height: 110vh;
+    min-height: 110vh;
 }
 
 /* Colonna sinistra: header + game-area */
@@ -29,9 +35,7 @@
 
 /* Header come prima */
 .header {
-    background: linear-gradient(135deg, #79081C 0%, #C80000 100%);
     padding: 1.5rem 2rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 /* Main solo per padding orizzontale sotto l’header */
@@ -52,7 +56,7 @@
 
 
         h1 {
-            color: white;
+            color: #C80000;
             text-align: center;
             font-size: 2.5rem;
             margin-bottom: 1rem;
@@ -262,11 +266,26 @@
     flex-direction: column;
     gap: 1.5rem;
 
-    height: 100%;          /* occupa tutta l’altezza dello schermo */
+    height: 100%;          /* occupa tutta l’altezza di .layout */
     border-left: 6px solid #C80000;  /* bordo sinistro rosso */
-    border-radius: 0;       /* niente angoli arrotondati se vuoi effetto colonna */
+    border-radius: 0;       /* niente angoli arrotondati, effetto colonna */
+    
 }
 
+/* Stile base del toggle */
+.sidebar-toggle {
+  position: absolute;
+  top: 1rem;
+  left: -2.2rem;          /* la freccia “esce” a sinistra della sidebar */
+  width: 2rem;
+  height: 2.5rem;
+  border-radius: 8px 0 0 8px;
+  border: none;
+  background: #79081C;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
 
         .sidebar h2 {
             color: #41009C;
@@ -358,13 +377,14 @@
         }
 
         .add-player {
-            display: flex;
-            gap: 0.5rem;
+        display: flex;
+        gap: 0.5rem;
         }
 
         .add-player input {
-            flex: 1;
-            padding: 0.8rem;
+              flex: 0 1 auto;     /* smette di allargarsi a tutto */
+            min-width: 0;        /* permette al bottone di avere spazio e l’input si restringe */
+            padding: 10px;
             border: 2px solid #CEAAD7;
             border-radius: 8px;
             font-size: 1rem;
@@ -374,7 +394,7 @@
             background: #FF6D00;
             color: white;
             border: none;
-            padding: 0.8rem 1.1rem;
+            padding: 10px 8px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
@@ -404,6 +424,7 @@
         }
 
         @media (max-width: 968px) {
+        
             main {
                 flex-direction: column;
             }
@@ -415,4 +436,41 @@
             .challenge-text {
                 font-size: 3.5rem;
             }
+
+            .layout {                /* o main: usa il tuo wrapper delle colonne */
+    position: relative;
+  }
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -299px;                /* quasi tutta fuori, si vede solo bordino+toggle */
+    height: 100vh;
+    transition: right 0.3s ease;  /* animi right */
+    border-left: 6px solid #C80000;
+    z-index: 100;
+  }
+  /* Toggle a tutta altezza */
+.sidebar-toggle {
+  position: absolute;
+  top: 0;
+  left: -19px;          /* esce a sinistra della sidebar */
+  width: 19px;          /* larghezza richiesta */
+  height: 100%;         /* stessa altezza della sidebar */
+  border: none;
+  background: #C80000;  /* o il colore che preferisci */
+  cursor: pointer;
+  display: flex;
+  align-items: center;  /* centra la freccia verticalmente */
+  justify-content: center;
+  padding: 0;           /* niente padding extra */
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 8px 0 0 8px; /* opzionale, bordi arrotondati verso fuori */
+}
+
+  .sidebar.open {
+    right: 0;                     /* entra in vista */
+  }
         }
