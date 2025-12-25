@@ -232,6 +232,26 @@ const syllables = [
             isRoundActive = false;
         }
 
+        function setupSidebarToggle() {
+  const sidebar = document.querySelector('.sidebar');
+  const toggleBtn = document.getElementById('sidebarToggle');
+  if (!sidebar || !toggleBtn) return;
+
+  toggleBtn.addEventListener('click', () => {
+    const isOpen = sidebar.classList.toggle('open');
+    toggleBtn.textContent = isOpen ? '>' : '<';
+  });
+}
+
+// dentro init():
+function init() {
+  setupCategoryButtons();
+  setupNextRoundButton();
+  showIdleState();
+  setupSidebarToggle();    // <--- aggiungi questa riga
+}
+
+
         // Reset round (removed - replaced by showIdleState)
 
         // Player Management
