@@ -231,11 +231,40 @@
             font-size: 1rem;
         }
 
+        .challenge-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.skip-btn {
+  background: #ffffff;
+  color: #6B3793;
+  border: 2px solid #6B3793;
+            padding: 8px 23px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 2rem;
+
+  transition: all 0.2s ease;
+}
+
+.skip-btn:hover {
+  background: #6B3793;
+  color: #ffffff;
+  
+            transform: translateY(-2px);
+}
+
+
         .next-round-btn {
             background: linear-gradient(135deg, #FF6D00 0%, #C80000 100%);
             color: white;
             border: none;
-            padding: 1rem 2.5rem;
+            padding:  8px 23px;;
             font-size: 1.2rem;
             font-weight: bold;
             border-radius: 12px;
@@ -248,6 +277,8 @@
         .next-round-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(200,0,0,0.4);
+            
+            background: linear-gradient(135deg, #C80000 0%, #79081C 100%);
         }
 
         .next-round-btn:disabled {
@@ -305,10 +336,34 @@
         }
 
         .player-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+
+        max-height: 65vh;      
+        overflow-y: auto;      /* compare la scrollbar se serve */
+        padding-right: 0.3rem; /* piccolo spazio per non tagliare le card */
         }
+.player-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.player-delete {
+  background: transparent;
+  border: none;
+  color: #C80000;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0 0.2rem;
+}
+
+.player-delete:hover {
+  color: #ff3b3b;
+}
+
 
         .player-card {
             background: #f8f8f8;
@@ -328,6 +383,17 @@
             margin-bottom: 0.5rem;
             color: #2a2a2a;
         }
+        .player-name-input { 
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: #2a2a2a;
+            outline: none;
+        }
+
 
         .lives {
             display: flex;
@@ -385,12 +451,12 @@
             transform: translateY(-1px);
         }
 
-        .add-player {
+        .add-player, .numbered-players {
         display: flex;
         gap: 0.5rem;
         }
 
-        .add-player input {
+        .add-player input, #fromNumber, #toNumber {
               flex: 0 1 auto;     /* smette di allargarsi a tutto */
             min-width: 0;        /* permette al bottone di avere spazio e l’input si restringe */
             padding: 10px;
@@ -399,7 +465,7 @@
             font-size: 1rem;
         }
 
-        .add-player button {
+        .add-player button, .numbered-players button {
             background: #FF6D00;
             color: white;
             border: none;
