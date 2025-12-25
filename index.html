@@ -33,9 +33,12 @@
       <div class="challenge-display">
         <div class="challenge-label">Current Challenge:</div>
         <div class="challenge-text hidden" id="challengeText">Click Start to Begin</div>
-        <button class="next-round-btn" id="nextRoundBtn">Start Round</button>
-      </div>
+
+        <div class="challenge-actions">
+                <button class="skip-btn" id="skipBtn">Skip</button>
+                <button class="next-round-btn" id="nextRoundBtn">Start Round</button>
         </div>
+     </div>
       </main>
        <!-- Footer colonna sinistra -->
     <footer class="page-footer">
@@ -52,6 +55,19 @@
         <input type="text" id="playerNameInput" placeholder="Player name" />
         <button onclick="addPlayer()">Add</button>
       </div>
+
+      <div class="numbered-players">
+        <input type="number" id="fromNumber" min="1" value="1">
+        <span>-</span>
+        <input type="number" id="toNumber" min="1" value="23">
+        <button onclick="addNumberedPlayers(
+            parseInt(document.getElementById('fromNumber').value, 10),
+            parseInt(document.getElementById('toNumber').value, 10)
+        )">
+            Add numbers
+        </button>
+      </div>
+
       <div class="player-list" id="playerList"></div>
       <div class="controls">
         <button class="control-btn" onclick="newGame()">New Game</button>
