@@ -3,6 +3,10 @@
         let currentCategory = 'syllables';
         let currentChallenge = '';
         let bombTimer = null;
+        let bombFrames = ["bomb1.png", "bomb2.png"]; // metti i tuoi percorsi reali
+        let bombFrameIndex = 0;
+        let bombFrameInterval = null;
+
         let isRoundActive = false;
         let players = [];
 
@@ -159,8 +163,8 @@ function setupSkipButton() {
             btn.disabled = true;
             btn.textContent = 'Round in Progress...';
 
-            // Random timer between 5-20 seconds
-            const duration = Math.random() * 15000 + 5000;
+            // Random timer between 5-50 seconds
+            const duration = Math.random() * 45000 + 5000;
 
             const bomb = document.querySelector('.bomb');
             bomb.classList.add('ticking');
@@ -168,11 +172,45 @@ function setupSkipButton() {
             // Start ticking sound
             startTickSound();
 
+            // Start bomb frames (alternanza immagini)
+            startBombFrames();
+
             // Set explosion timer
             bombTimer = setTimeout(() => {
                 explode();
             }, duration);
         }
+
+        //bombs photos
+// Bombs photos: alternanza immagini di sfondo
+function startBombFrames() {
+  const bomb = document.querySelector('.bomb');
+  if (!bomb) return;
+
+  // primo frame subito
+  bombFrameIndex = 0;
+  bomb.style.backgroundImage = `url('${bombFrames[bombFrameIndex]}')`;
+
+  // alterna i frame ogni 200ms (puoi cambiare il valore)
+  bombFrameInterval = setInterval(() => {
+    bombFrameIndex = (bombFrameIndex + 1) % bombFrames.length;
+    bomb.style.backgroundImage = `url('${bombFrames[bombFrameIndex]}')`;
+  }, 200);
+}
+
+function stopBombFrames() {
+  const bomb = document.querySelector('.bomb');
+  if (bombFrameInterval) {
+    clearInterval(bombFrameInterval);
+    bombFrameInterval = null;
+  }
+  // opzionale: ritorna all’immagine base
+  if (bomb) {
+    bombFrameIndex = 0;
+    bomb.style.backgroundImage = `url('${bombFrames[0]}')`;
+  }
+}
+
 
         // Tick sound generator
         let tickInterval;
@@ -204,6 +242,7 @@ function setupSkipButton() {
         // Explosion
         function explode() {
             stopTickSound();
+            stopBombFrames();
             
             const bomb = document.querySelector('.bomb');
             const explosion = document.querySelector('.explosion');
@@ -243,14 +282,21 @@ function setupSkipButton() {
 
         // Stop round
         function stopRound() {
-            if (bombTimer) {
-                clearTimeout(bombTimer);
-            }
-            stopTickSound();
-            const bomb = document.querySelector('.bomb');
+          if (bombTimer) {
+            clearTimeout(bombTimer);
+          }
+
+          stopTickSound();
+          stopBombFrames();
+
+          const bomb = document.querySelector('.bomb');
+          if (bomb) {
             bomb.classList.remove('ticking', 'exploding');
-            isRoundActive = false;
+          }
+
+          isRoundActive = false;
         }
+
 
         function setupSidebarToggle() {
   const sidebar = document.querySelector('.sidebar');
@@ -308,9 +354,18 @@ function setupSkipButton() {
     const headerRow = document.createElement('div');
     headerRow.className = 'player-header';
 
-    const nameDiv = document.createElement('div');
-    nameDiv.className = 'player-name';
-    nameDiv.textContent = player.name;
+const nameInput = document.createElement('input');
+nameInput.className = 'player-name-input';
+nameInput.type = 'text';
+nameInput.value = player.name;
+
+// quando l'utente cambia il testo, aggiorniamo l'array players
+nameInput.addEventListener('change', () => {
+  players[index].name = nameInput.value.trim() || players[index].name;
+});
+
+// se vuoi salvare subito anche mentre scrive, puoi usare 'input' invece di 'change'
+
 
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'player-delete';
@@ -318,8 +373,9 @@ function setupSkipButton() {
     deleteBtn.title = 'Remove player';
     deleteBtn.addEventListener('click', () => removePlayer(index));
 
-    headerRow.appendChild(nameDiv);
+    headerRow.appendChild(nameInput);
     headerRow.appendChild(deleteBtn);
+
 
     const livesDiv = document.createElement('div');
     livesDiv.className = 'lives';
