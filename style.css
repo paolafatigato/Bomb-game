@@ -35,7 +35,7 @@
 
 /* Header come prima */
 .header {
-    padding: 1.5rem 2rem;
+    padding: 2.5rem 0.1rem 0.1rem 0.1rem;
 }
 
 /* Main solo per padding orizzontale sotto l’header */
@@ -115,19 +115,22 @@
         /* Bomb Container */
         .bomb-container {
             position: relative;
-            width: 250px;
-            height: 250px;
+            width: 360px;
+            height: 360px;
+              /* nuovo: spostamento rispetto alla posizione attuale */
+  margin-top: -40px;   /* valore negativo = più in alto */
+  margin-left: 99px;   /* positivo = più a destra */
         }
 
-        .bomb {
+            .bomb {
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 30% 30%, #2a2a2a, #1a1a1a);
-            border-radius: 50%;
+            background: url('bomb1.png') center center / contain no-repeat;
             position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             transition: transform 0.1s ease;
-        }
+            /* niente border-radius obbligatorio: la forma la fa la PNG */
+            }
+
 
         .bomb.ticking {
             animation: tick 1s infinite;
@@ -148,28 +151,7 @@
             100% { transform: scale(2); opacity: 0; }
         }
 
-        .fuse {
-            position: absolute;
-            top: -60px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 60px;
-            background: #8B4513;
-        }
 
-        .spark {
-            position: absolute;
-            top: -70px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 20px;
-            background: #FF6D00;
-            border-radius: 50%;
-            box-shadow: 0 0 20px #FF6D00;
-            animation: sparkle 0.5s infinite;
-        }
 
         @keyframes sparkle {
             0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
